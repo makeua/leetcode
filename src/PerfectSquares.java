@@ -20,36 +20,26 @@ public class PerfectSquares {
             }
         }
 
-        if (squares[l] > n) {
-            l--;
+        int[] table = new int[n + 1];
+        table[0] = 0;
+        for (int i = 1; i <= n; i++) {
+            table[i] = Integer.MAX_VALUE;
         }
 
-        int ans = 0;
-
-        while (n > 0) {
-            for (int i = l; i > 0; i--) {
-                if (n % squares[i] == 0) {
-                    ans += n / squares[i];
-                    n = 0;
-                    break;
+        for (int i = 1; i <= n; i++) {
+            for (int j = 0; j <= l; j++)
+                if (squares[j] <= i) {
+                    int sub_res = table[i - squares[j]];
+                    if (sub_res != Integer.MAX_VALUE && sub_res + 1 < table[i])
+                        table[i] = sub_res + 1;
                 }
-            }
-            if (n > 0) {
-                for (int i = l; i >= 0; i--) {
-                    if (squares[i] <= n) {
-                        n -= squares[i];
-                        ans++;
-                        break;
-                    }
-                }
-            }
         }
-        return ans;
+        return table[n];
     }
 
     public static void main(String[] args) {
         PerfectSquares perfectSquares = new PerfectSquares();
-        for (int i = 19; i < 20; i++) {
+        for (int i = 1; i < 20; i++) {
             System.out.println(i + " " + perfectSquares.numSquares(i));
         }
     }
